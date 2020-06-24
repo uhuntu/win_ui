@@ -16,3 +16,4 @@ rand = "0.7"
 
 [package.metadata.winrt.dependencies]
 "Microsoft.UI.Xaml" = "2.5.0-prerelease.200609001"
+"Microsoft.VCRTForwarders.140" = "1.0.6"
