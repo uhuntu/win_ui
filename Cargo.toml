@@ -14,6 +14,9 @@ winrt = { git = "https://github.com/microsoft/winrt-rs" }
 bindings = { path = "./bindings"}
 rand = "0.7"
 
+[build-dependencies]
+embed-resource = "1.3"
+
 [package.metadata.winrt.dependencies]
 "Microsoft.UI.Xaml" = "2.5.0-prerelease.200609001"
 "Microsoft.VCRTForwarders.140" = "1.0.6"

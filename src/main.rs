@@ -16,7 +16,7 @@ use std::ptr;
 
 fn run() -> winrt::Result<()> {
     ro_initialize(RoInitType::MultiThreaded)?;
-    let _ = WindowsXamlManager::initialize_for_current_thread()?;
+    let _manager = WindowsXamlManager::initialize_for_current_thread()?;
     let desktop_source = winrt::factory::<DesktopWindowXamlSource, IDesktopWindowXamlSourceFactory>()?.create_instance(Object::default(), &mut Object::default())?;
     let interop: IDesktopWindowXamlSourceNative = desktop_source.clone().into();
     
