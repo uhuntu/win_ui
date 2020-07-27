@@ -25,7 +25,6 @@ fn run() -> winrt::Result<()> {
     window.set_title("WinUI");
     let win32_window_id = window.id();
 
-
     let hwnd = window.hwnd();
     interop.attach_to_window(hwnd)?;
     let hwnd_xaml_island = interop.get_window_handle()?;
@@ -36,11 +35,10 @@ fn run() -> winrt::Result<()> {
     let xaml_container = winrt::factory::<StackPanel, IStackPanelFactory>()?.create_instance(Object::default(), &mut Object::default())?;
 
     let tb = winrt::factory::<TextBox, ITextBoxFactory>()?.create_instance(Object::default(), &mut Object::default())?;
-    
-    // This causes an error: (exit code: 0xc0000005, STATUS_ACCESS_VIOLATION)
-    let _ = winrt::factory::<NumberBox, INumberBoxFactory>()?.create_instance(Object::default(), &mut Object::default())?;
+    let nb = winrt::factory::<NumberBox, INumberBoxFactory>()?.create_instance(Object::default(), &mut Object::default())?;
 
     xaml_container.children()?.append(&tb)?;
+    xaml_container.children()?.append(&nb)?;
     xaml_container.update_layout()?;
     desktop_source.set_content(xaml_container)?;
 
