@@ -13,6 +13,7 @@ raw-window-handle = "0.3"
 winrt = { git = "https://github.com/microsoft/winrt-rs" }
 bindings = { path = "./bindings"}
 rand = "0.7"
+paho-mqtt = "0.7.1"
 
 [build-dependencies]
 embed-resource = "1.3"
