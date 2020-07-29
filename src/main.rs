@@ -163,6 +163,22 @@ fn run() -> winrt::Result<()> {
                 event: WindowEvent::CloseRequested,
                 window_id,
             } if window_id == win32_window_id => *control_flow = ControlFlow::Exit,
+            Event::WindowEvent {
+                event: WindowEvent::Resized(size),
+                window_id,
+            } if window_id == win32_window_id => {
+                unsafe {
+                    crate::SetWindowPos(
+                        hwnd_xaml_island,
+                        ptr::null_mut(),
+                        0,
+                        0,
+                        size.width as i32,
+                        size.height as i32,
+                        /*SWP_SHOWWINDOW*/ 0x40,
+                    );
+                }
+            }
             _ => (),
         }
     });
