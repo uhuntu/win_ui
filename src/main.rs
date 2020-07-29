@@ -3,7 +3,6 @@ mod interop;
 use interop::{RoInitType, ro_initialize, IDesktopWindowXamlSourceNative};
 
 use bindings::windows::ui::xaml::{controls::*, hosting::*};
-use bindings::microsoft::ui::xaml::controls::*;
 use winit::{
     event::{Event, WindowEvent},
     event_loop::{ControlFlow, EventLoop},
@@ -35,10 +34,8 @@ fn run() -> winrt::Result<()> {
     let xaml_container = winrt::factory::<StackPanel, IStackPanelFactory>()?.create_instance(Object::default(), &mut Object::default())?;
 
     let tb = winrt::factory::<TextBox, ITextBoxFactory>()?.create_instance(Object::default(), &mut Object::default())?;
-    let nb = winrt::factory::<NumberBox, INumberBoxFactory>()?.create_instance(Object::default(), &mut Object::default())?;
 
     xaml_container.children()?.append(&tb)?;
-    xaml_container.children()?.append(&nb)?;
     xaml_container.update_layout()?;
     desktop_source.set_content(xaml_container)?;
 
