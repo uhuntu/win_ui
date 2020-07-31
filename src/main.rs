@@ -72,7 +72,7 @@ fn run() -> winrt::Result<()> {
 
     xaml_container.children()?.append(&tb)?;
     xaml_container.update_layout()?;
-    desktop_source.set_content(xaml_container)?;
+    desktop_source.set_content(&xaml_container)?;
 
     let host = "tcp://localhost:1883".to_string();
 
@@ -151,6 +151,11 @@ fn run() -> winrt::Result<()> {
             for msg in rx.try_iter() {
                 if let Some(msg) = msg {
                     println!("{}", msg);
+                    xaml_container.children().unwrap().append({
+                        let new_text = TextBlock::new().unwrap();
+                        new_text.set_text(msg.to_string()).unwrap();
+                        new_text
+                    }).unwrap();
                 } else if cli.is_connected() || !try_reconnect(&cli) {
                     break;
                 }
