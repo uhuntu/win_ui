@@ -11,7 +11,6 @@ use winit::{
 };
 
 use std::ptr;
-use winrt::Object;
 
 use std::{process, thread, time::Duration};
 
@@ -36,19 +35,25 @@ fn try_reconnect(cli: &mqtt::Client) -> bool {
 
 fn run() -> winrt::Result<()> {
     ro_initialize(RoInitType::MultiThreaded)?;
+
     let _manager = WindowsXamlManager::initialize_for_current_thread()?;
-    let desktop_source =
-        winrt::factory::<DesktopWindowXamlSource, IDesktopWindowXamlSourceFactory>()?
-            .create_instance(Object::default(), &mut Object::default())?;
+
+    let desktop_source = DesktopWindowXamlSource::new()?;
+
     let interop: IDesktopWindowXamlSourceNative = desktop_source.clone().into();
 
     let event_loop = EventLoop::new();
+
     let window = WindowBuilder::new().build(&event_loop).unwrap();
+
     window.set_title("WinUI");
+
     let win32_window_id = window.id();
 
     let hwnd = window.hwnd();
+
     interop.attach_to_window(hwnd)?;
+
     let hwnd_xaml_island = interop.get_window_handle()?;
 
     let size = window.inner_size();
@@ -65,7 +70,6 @@ fn run() -> winrt::Result<()> {
     }
 
     let stack_panel = StackPanel::new()?;
-
     let text_box = TextBox::new()?;
 
     stack_panel.children()?.append(&text_box)?;
