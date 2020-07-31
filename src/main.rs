@@ -44,13 +44,10 @@ fn run() -> winrt::Result<()> {
         );
     }
 
-    let xaml_container = winrt::factory::<StackPanel, IStackPanelFactory>()?
-        .create_instance(Object::default(), &mut Object::default())?;
+    let xaml_container = StackPanel::new()?;
 
-    let tb = winrt::factory::<TextBox, ITextBoxFactory>()?
-        .create_instance(Object::default(), &mut Object::default())?;
-    let nb = winrt::factory::<NumberBox, INumberBoxFactory>()?
-        .create_instance(Object::default(), &mut Object::default())?;
+    let tb = TextBox::new()?;
+    let nb = NumberBox::new()?;
 
     xaml_container.children()?.append(&tb)?;
     xaml_container.children()?.append(&nb)?;
