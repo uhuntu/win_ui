@@ -103,8 +103,8 @@ fn run() -> winrt::Result<()> {
         .will_message(lwt)
         .finalize();
 
-    let subscriptions = ["test", "hello"];
-    let qos = [1, 1];
+    let subscriptions = ["test", "hello", "touchrev/keepalive"];
+    let qos = [1, 1, 1];
 
     // Make the connection to the broker
     println!("Connecting to the MQTT broker...");
