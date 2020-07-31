@@ -1,9 +1,9 @@
 mod interop;
 
-use interop::{RoInitType, ro_initialize, IDesktopWindowXamlSourceNative};
+use interop::{ro_initialize, IDesktopWindowXamlSourceNative, RoInitType};
 
-use bindings::windows::ui::xaml::{controls::*, hosting::*};
 use bindings::microsoft::ui::xaml::controls::*;
+use bindings::windows::ui::xaml::{controls::*, hosting::*};
 use winit::{
     event::{Event, WindowEvent},
     event_loop::{ControlFlow, EventLoop},
@@ -11,15 +11,17 @@ use winit::{
     window::WindowBuilder,
 };
 
-use winrt::Object;
 use std::ptr;
+use winrt::Object;
 
 fn run() -> winrt::Result<()> {
     ro_initialize(RoInitType::MultiThreaded)?;
     let _manager = WindowsXamlManager::initialize_for_current_thread()?;
-    let desktop_source = winrt::factory::<DesktopWindowXamlSource, IDesktopWindowXamlSourceFactory>()?.create_instance(Object::default(), &mut Object::default())?;
+    let desktop_source =
+        winrt::factory::<DesktopWindowXamlSource, IDesktopWindowXamlSourceFactory>()?
+            .create_instance(Object::default(), &mut Object::default())?;
     let interop: IDesktopWindowXamlSourceNative = desktop_source.clone().into();
-    
+
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new().build(&event_loop).unwrap();
     window.set_title("WinUI");
@@ -30,12 +32,25 @@ fn run() -> winrt::Result<()> {
     let hwnd_xaml_island = interop.get_window_handle()?;
 
     let size = window.inner_size();
-    unsafe { crate::SetWindowPos(hwnd_xaml_island, ptr::null_mut(), 0, 0, size.width as i32, size.height as i32, /*SWP_SHOWWINDOW*/ 0x40); }
+    unsafe {
+        crate::SetWindowPos(
+            hwnd_xaml_island,
+            ptr::null_mut(),
+            0,
+            0,
+            size.width as i32,
+            size.height as i32,
+            /*SWP_SHOWWINDOW*/ 0x40,
+        );
+    }
 
-    let xaml_container = winrt::factory::<StackPanel, IStackPanelFactory>()?.create_instance(Object::default(), &mut Object::default())?;
+    let xaml_container = winrt::factory::<StackPanel, IStackPanelFactory>()?
+        .create_instance(Object::default(), &mut Object::default())?;
 
-    let tb = winrt::factory::<TextBox, ITextBoxFactory>()?.create_instance(Object::default(), &mut Object::default())?;
-    let nb = winrt::factory::<NumberBox, INumberBoxFactory>()?.create_instance(Object::default(), &mut Object::default())?;
+    let tb = winrt::factory::<TextBox, ITextBoxFactory>()?
+        .create_instance(Object::default(), &mut Object::default())?;
+    let nb = winrt::factory::<NumberBox, INumberBoxFactory>()?
+        .create_instance(Object::default(), &mut Object::default())?;
 
     xaml_container.children()?.append(&tb)?;
     xaml_container.children()?.append(&nb)?;
@@ -72,6 +87,6 @@ extern "stdcall" {
         y: i32,
         cx: i32,
         cy: i32,
-        flags: u32
+        flags: u32,
     ) -> i32;
 }

@@ -4,7 +4,7 @@ winrt::build!(
         os
     types
         windows::ui::xaml::hosting::{DesktopWindowXamlSource, IDesktopWindowXamlSourceFactory, WindowsXamlManager}
-        windows::ui::xaml::controls::{StackPanel, IStackPanelFactory, NumberBox, INumberBoxFactory, TextBox, ITextBoxFactory}
+        windows::ui::xaml::controls::{StackPanel, IStackPanelFactory, TextBox, ITextBoxFactory}
         microsoft::ui::xaml::controls::{NumberBox, INumberBoxFactory}
 );
 
