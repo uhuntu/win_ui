@@ -11,14 +11,11 @@ use winit::{
 };
 
 use std::ptr;
-use winrt::Object;
 
 fn run() -> winrt::Result<()> {
     ro_initialize(RoInitType::MultiThreaded)?;
     let _manager = WindowsXamlManager::initialize_for_current_thread()?;
-    let desktop_source =
-        winrt::factory::<DesktopWindowXamlSource, IDesktopWindowXamlSourceFactory>()?
-            .create_instance(Object::default(), &mut Object::default())?;
+    let desktop_source = DesktopWindowXamlSource::new()?;
     let interop: IDesktopWindowXamlSourceNative = desktop_source.clone().into();
 
     let event_loop = EventLoop::new();
@@ -43,11 +40,9 @@ fn run() -> winrt::Result<()> {
         );
     }
 
-    let xaml_container = winrt::factory::<StackPanel, IStackPanelFactory>()?
-        .create_instance(Object::default(), &mut Object::default())?;
+    let xaml_container = StackPanel::new()?;
 
-    let tb = winrt::factory::<TextBox, ITextBoxFactory>()?
-        .create_instance(Object::default(), &mut Object::default())?;
+    let tb = TextBox::new()?;
 
     xaml_container.children()?.append(&tb)?;
     xaml_container.update_layout()?;
