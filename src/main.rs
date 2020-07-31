@@ -64,15 +64,13 @@ fn run() -> winrt::Result<()> {
         );
     }
 
-    let xaml_container = winrt::factory::<StackPanel, IStackPanelFactory>()?
-        .create_instance(Object::default(), &mut Object::default())?;
+    let stack_panel = StackPanel::new()?;
 
-    let tb = winrt::factory::<TextBox, ITextBoxFactory>()?
-        .create_instance(Object::default(), &mut Object::default())?;
+    let text_box = TextBox::new()?;
 
-    xaml_container.children()?.append(&tb)?;
-    xaml_container.update_layout()?;
-    desktop_source.set_content(&xaml_container)?;
+    stack_panel.children()?.append(&text_box)?;
+    stack_panel.update_layout()?;
+    desktop_source.set_content(&stack_panel)?;
 
     let host = "tcp://localhost:1883".to_string();
 
@@ -151,11 +149,15 @@ fn run() -> winrt::Result<()> {
             for msg in rx.try_iter() {
                 if let Some(msg) = msg {
                     println!("{}", msg);
-                    xaml_container.children().unwrap().append({
-                        let new_text = TextBlock::new().unwrap();
-                        new_text.set_text(msg.to_string()).unwrap();
-                        new_text
-                    }).unwrap();
+                    stack_panel
+                        .children()
+                        .unwrap()
+                        .append({
+                            let new_text = TextBlock::new().unwrap();
+                            new_text.set_text(msg.to_string()).unwrap();
+                            new_text
+                        })
+                        .unwrap();
                 } else if cli.is_connected() || !try_reconnect(&cli) {
                     break;
                 }
