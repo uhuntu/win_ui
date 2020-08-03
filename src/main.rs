@@ -47,7 +47,7 @@ fn run() -> winrt::Result<()> {
     sp.children()?.append(&tb)?;
     sp.update_layout()?;
     desktop_source.set_content(&sv)?;
-    sv.set_content(&sp.into())?;
+    sv.set_content(&sp)?;
 
     event_loop.run(move |event, _, control_flow| {
         *control_flow = ControlFlow::Wait;
