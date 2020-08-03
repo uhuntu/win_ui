@@ -43,7 +43,9 @@ fn run() -> winrt::Result<()> {
     let sp = StackPanel::new()?;
     let tb = TextBox::new()?;
     let sv = ScrollViewer::new()?;
+    let lv = ListView::new()?;
 
+    lv.items()?.append("test")?;
     sp.children()?.append(&tb)?;
     sp.update_layout()?;
     desktop_source.set_content(&sv)?;

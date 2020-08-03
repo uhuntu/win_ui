@@ -3,7 +3,7 @@ winrt::build!(
         os
     types
         windows::ui::xaml::hosting::{DesktopWindowXamlSource, IDesktopWindowXamlSourceFactory, WindowsXamlManager}
-        windows::ui::xaml::controls::{ScrollViewer, StackPanel, TextBox}
+        windows::ui::xaml::controls::{ScrollViewer, StackPanel, ListView, TextBox}
 );
 
 fn main() {
