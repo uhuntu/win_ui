@@ -37,25 +37,15 @@ fn run() -> winrt::Result<()> {
     ro_initialize(RoInitType::MultiThreaded)?;
 
     let _manager = WindowsXamlManager::initialize_for_current_thread()?;
-
     let desktop_source = DesktopWindowXamlSource::new()?;
-
     let interop: IDesktopWindowXamlSourceNative = desktop_source.clone().into();
-
     let event_loop = EventLoop::new();
-
     let window = WindowBuilder::new().build(&event_loop).unwrap();
-
     window.set_title("WinUI");
-
     let win32_window_id = window.id();
-
     let hwnd = window.hwnd();
-
     interop.attach_to_window(hwnd)?;
-
     let hwnd_xaml_island = interop.get_window_handle()?;
-
     let size = window.inner_size();
     unsafe {
         crate::SetWindowPos(
@@ -69,12 +59,17 @@ fn run() -> winrt::Result<()> {
         );
     }
 
+    let scroll_viewer = ScrollViewer::new()?;
     let stack_panel = StackPanel::new()?;
     let text_box = TextBox::new()?;
 
     stack_panel.children()?.append(&text_box)?;
     stack_panel.update_layout()?;
-    desktop_source.set_content(&stack_panel)?;
+
+    scroll_viewer.set_content(&stack_panel)?;
+    scroll_viewer.update_layout()?;
+
+    desktop_source.set_content(&scroll_viewer)?;
 
     let host = "tcp://localhost:1883".to_string();
 
