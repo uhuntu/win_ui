@@ -41,15 +41,13 @@ fn run() -> winrt::Result<()> {
     }
 
     let sp = StackPanel::new()?;
-
     let tb = TextBox::new()?;
-
     let sv = ScrollViewer::new()?;
 
     sp.children()?.append(&tb)?;
     sp.update_layout()?;
     desktop_source.set_content(&sv)?;
-    sv.set_content(&sp)?;
+    sv.set_content(&sp.into())?;
 
     event_loop.run(move |event, _, control_flow| {
         *control_flow = ControlFlow::Wait;
