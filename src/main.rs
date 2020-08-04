@@ -12,6 +12,8 @@ use winit::{
 
 use std::ptr;
 
+use winrt::PropertyValue;
+
 fn run() -> winrt::Result<()> {
     ro_initialize(RoInitType::MultiThreaded)?;
     let _manager = WindowsXamlManager::initialize_for_current_thread()?;
@@ -45,8 +47,11 @@ fn run() -> winrt::Result<()> {
     let sv = ScrollViewer::new()?;
     let lv = ListView::new()?;
 
-    lv.items()?.append("test")?;
+    let object = PropertyValue::create_string("hello")?;
+
+    lv.items()?.append(object)?;
     sp.children()?.append(&tb)?;
+    sp.children()?.append(&lv)?;
     sp.update_layout()?;
     desktop_source.set_content(&sv)?;
     sv.set_content(&sp)?;
