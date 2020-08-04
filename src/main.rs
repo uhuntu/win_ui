@@ -10,9 +10,9 @@ use winit::{
     window::WindowBuilder,
 };
 
-use std::ptr;
+use winrt::PropertyValue;
 
-use std::{process, thread, time::Duration};
+use std::{ptr, process, thread, time::Duration};
 
 use paho_mqtt as mqtt;
 
@@ -61,9 +61,14 @@ fn run() -> winrt::Result<()> {
 
     let scroll_viewer = ScrollViewer::new()?;
     let stack_panel = StackPanel::new()?;
+    let list_view = ListView::new()?;
     let text_box = TextBox::new()?;
 
+    let object = PropertyValue::create_string("hello")?;
+    list_view.items()?.append(object)?;
+
     stack_panel.children()?.append(&text_box)?;
+    stack_panel.children()?.append(&list_view)?;
     stack_panel.update_layout()?;
 
     scroll_viewer.set_content(&stack_panel)?;
@@ -185,7 +190,7 @@ fn run() -> winrt::Result<()> {
                     );
                 }
             }
-            _ => (),
+            _ => {}
         }
     });
 }
