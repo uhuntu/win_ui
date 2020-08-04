@@ -12,7 +12,7 @@ use winit::{
 
 use winrt::PropertyValue;
 
-use std::{ptr, process, thread, time::Duration};
+use std::{process, ptr, thread, time::Duration};
 
 use paho_mqtt as mqtt;
 
@@ -65,7 +65,7 @@ fn run() -> winrt::Result<()> {
     let text_box = TextBox::new()?;
 
     let object = PropertyValue::create_string("hello")?;
-    list_view.items()?.append(object)?;
+    list_view.items()?.append(&object)?;
 
     stack_panel.children()?.append(&text_box)?;
     stack_panel.children()?.append(&list_view)?;
@@ -153,15 +153,20 @@ fn run() -> winrt::Result<()> {
             for msg in rx.try_iter() {
                 if let Some(msg) = msg {
                     println!("{}", msg);
-                    stack_panel
-                        .children()
-                        .unwrap()
-                        .append({
-                            let new_text = TextBlock::new().unwrap();
-                            new_text.set_text(msg.to_string()).unwrap();
-                            new_text
-                        })
-                        .unwrap();
+                    // stack_panel
+                    //     .children()
+                    //     .unwrap()
+                    //     .append({
+                    //         let new_text = TextBlock::new().unwrap();
+                    //         new_text.set_text(msg.to_string()).unwrap();
+                    //         new_text
+                    //     })
+                    //     .unwrap();
+                    list_view.items().unwrap().append({
+                        let new_text = TextBlock::new().unwrap();
+                        new_text.set_text(msg.to_string()).unwrap();
+                        new_text
+                    }).unwrap();
                 } else if cli.is_connected() || !try_reconnect(&cli) {
                     break;
                 }
