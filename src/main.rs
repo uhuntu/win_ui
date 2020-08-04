@@ -16,6 +16,8 @@ use std::{process, ptr, thread, time::Duration};
 
 use paho_mqtt as mqtt;
 
+use serde_json::Value;
+
 // This will attempt to reconnect to the broker. It can be called after
 // connection is lost. In this example, we try to reconnect several times,
 // with a few second pause between each attempt. A real system might keep
@@ -41,7 +43,9 @@ fn run() -> winrt::Result<()> {
     let interop: IDesktopWindowXamlSourceNative = desktop_source.clone().into();
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new().build(&event_loop).unwrap();
+
     window.set_title("WinUI");
+
     let win32_window_id = window.id();
     let hwnd = window.hwnd();
     interop.attach_to_window(hwnd)?;
@@ -62,13 +66,18 @@ fn run() -> winrt::Result<()> {
     let scroll_viewer = ScrollViewer::new()?;
     let stack_panel = StackPanel::new()?;
     let list_view = ListView::new()?;
+    let grid_view = GridView::new()?;
     let text_box = TextBox::new()?;
 
     let object = PropertyValue::create_string("hello")?;
+
     list_view.items()?.append(&object)?;
+    grid_view.items()?.append(&object)?;
 
     stack_panel.children()?.append(&text_box)?;
     stack_panel.children()?.append(&list_view)?;
+    stack_panel.children()?.append(&grid_view)?;
+
     stack_panel.update_layout()?;
 
     scroll_viewer.set_content(&stack_panel)?;
@@ -153,20 +162,23 @@ fn run() -> winrt::Result<()> {
             for msg in rx.try_iter() {
                 if let Some(msg) = msg {
                     println!("{}", msg);
-                    // stack_panel
-                    //     .children()
-                    //     .unwrap()
-                    //     .append({
-                    //         let new_text = TextBlock::new().unwrap();
-                    //         new_text.set_text(msg.to_string()).unwrap();
-                    //         new_text
-                    //     })
-                    //     .unwrap();
-                    list_view.items().unwrap().append({
-                        let new_text = TextBlock::new().unwrap();
-                        new_text.set_text(msg.to_string()).unwrap();
-                        new_text
-                    }).unwrap();
+
+                    let v: Value = serde_json::from_str(&msg.payload_str()).unwrap();
+
+                    println!(
+                        "Please call {} at the number {}",
+                        v["serialno"], v["ipaddress"]
+                    );
+
+                    list_view
+                        .items()
+                        .unwrap()
+                        .append({
+                            let new_text = TextBlock::new().unwrap();
+                            new_text.set_text(msg.to_string()).unwrap();
+                            new_text
+                        })
+                        .unwrap();
                 } else if cli.is_connected() || !try_reconnect(&cli) {
                     break;
                 }
