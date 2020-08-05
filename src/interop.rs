@@ -31,14 +31,12 @@ pub struct abi_IDesktopWindowXamlSourceNative {
 
 unsafe impl winrt::ComInterface for IDesktopWindowXamlSourceNative {
     type VTable = abi_IDesktopWindowXamlSourceNative;
-    fn iid() -> ::winrt::Guid {
-        ::winrt::Guid::from_values(
-            1019015615,
-            12150,
-            20124,
-            [150, 171, 232, 75, 55, 151, 37, 84],
-        )
-    }
+    const IID: winrt::Guid = ::winrt::Guid::from_values(
+        1019015615,
+        12150,
+        20124,
+        [150, 171, 232, 75, 55, 151, 37, 84],
+    );
 }
 
 unsafe impl winrt::AbiTransferable for IDesktopWindowXamlSourceNative {
