@@ -9,7 +9,7 @@ edition = "2018"
 [dependencies]
 winit = "0.22"
 raw-window-handle = "0.3"
-winrt = { git = "https://github.com/microsoft/winrt-rs", branch = "foundation" }
+winrt = { git = "https://github.com/microsoft/winrt-rs" }
 bindings = { path = "./bindings"}
 rand = "0.7"
 paho-mqtt = "0.7.1"

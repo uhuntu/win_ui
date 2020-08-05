@@ -10,7 +10,7 @@ use winit::{
     window::WindowBuilder,
 };
 
-use winrt::PropertyValue;
+use winrt::foundation::PropertyValue;
 
 use std::{process, ptr, thread, time::Duration};
 
